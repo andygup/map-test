@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>ArcGIS Maps SDK for JavaScript Tutorials: Display a map using arcgis/map-components</title>
+
+  <style>
+    html,
+    body{
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <!-- Load Map Components from CDN-->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.29/"></script>
+  <script type="module" src="https://js.arcgis.com/map-components/4.29/arcgis-map-components.esm.js"></script>
+
+</head>
+
+<body>
+  <button onclick="changeCenter()">Click</button>
+  <arcgis-map />
+  <script>    
+    const changeCenter = () => {
+      console.log("test");
+      map.zoom = 10;
+      // map.center = [8.5,47.8];
+      // map = {
+      //   ...map,
+      //   {
+      //   center: "8.5,47.27"
+      //   }
+      // }
+    }
+    let map = document.querySelector("arcgis-map");
+    map.addEventListener("arcgisViewReadyChange", (event) => {
+      console.log("hello", event.target.map);
+      map.basemap = "topo-vector";
+      map.zoom = 18;
+      map.center = "8.5,47.37"; 
+    });
+  </script>
+
+</body>
+
+</html>
