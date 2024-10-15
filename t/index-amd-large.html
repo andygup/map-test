@@ -1,0 +1,406 @@
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Multivariate data exploration | Sample | ArcGIS Maps SDK for JavaScript 4.30</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .widget-background {
+      background-color: white;
+      font-size: 12pt;
+      text-align: center;
+      padding: 6px;
+      width: 320px;
+    }
+  </style>
+
+  <script src="https://js.arcgis.com/4.30/"></script>
+
+<script>
+        require([
+            "esri/kernel",
+            "esri/config",
+            "esri/intl",
+            "esri/Map", "esri/WebMap",
+            "esri/geometry/Extent",
+            "esri/views/MapView",
+            "esri/widgets/BasemapToggle",
+            "esri/widgets/Bookmarks",
+            "esri/widgets/Compass",
+            "esri/widgets/Editor", "esri/widgets/Expand",
+            "esri/widgets/Home",
+            "esri/widgets/LayerList", "esri/widgets/Legend",
+            "esri/widgets/Print",
+            "esri/widgets/ScaleBar", "esri/widgets/Search",
+            "esri/widgets/TimeSlider"
+          ],
+            function (esriNS, esriConfig,
+              intl,
+              Map, WebMap,
+              Extent,
+              MapView,
+              BasemapToggle,
+              Bookmarks,
+              Compass,
+              Editor, Expand,
+              Home,
+              LayerList, Legend,
+              Print,
+              ScaleBar, Search,
+              TimeSlider
+            ) {
+              window.parent.postMessage("ready", '*');
+              let useapikey = false;
+              const pageURL = new URL(window.location.href);
+              const webmapId = "b4cfa4a48dbb49b8b150c14bb6cca6f9";
+              const portal = 'https://www.arcgis.com';
+
+              if (useapikey) {
+                esriConfig.apiKey = 'AAPK8a6f9c45a523453caa1a3991633ce00dWyiKdtFur9O5Q-YIJoE7wH_PA5d0HO1SIskaNM0sX5FjyJbvq2ONzihNdnu4KNx8'; // bsvensson_jsapi
+                console.log("using an API key");
+              }
+              if (pageURL.searchParams.get("locale") && esriNS.version > 4.15) {
+                const locale = pageURL.searchParams.get("locale");
+                intl.setLocale(locale);
+                console.log(esriNS.version, "-- locale:", locale);
+              }
+              console.log(esriNS.version, "-- webmap:", webmapId, "from", portal);
+              footerDiv.innerHTML += " <a href='about.html' target='_blank'>About</a> this app";
+              //footerDiv.innerHTML += " -- <a href='index.html?version=" + esriNS.version + "&webmap=" + webmapId + "'>link to this app</a>";
+              footerDiv.innerHTML += " -- <a target='_blank' href='" + portal + "/home/item.html?id=" + webmapId + "'>item page</a>";
+              footerDiv.innerHTML += " -- <a target='_blank' href='" + portal + "/sharing/rest/content/items/" + webmapId + "/data?f=pjson'>webmap JSON</a>";
+              esriConfig.portalUrl = portal;
+              map = new WebMap({
+                portalItem: {
+                  id: webmapId,
+                  portal: portal
+                }
+              });
+              let webmapHasTimeSlider = false;
+              map.when(function () {
+                // timestuff check
+                if (esriNS.version > 4.21) {
+                  TimeSlider.getPropertiesFromWebMap(map).then((timeSliderSettings) => {
+                    if (timeSliderSettings) {
+                      console.log(esriNS.version, "-- timeslider smartness added at 4.22:", timeSliderSettings);
+                      const timeSlider = new TimeSlider({
+                        container: "timeSlider",
+                        ...timeSliderSettings,
+                        view
+                      });
+                      view.ui.add(timeSlider, "manual");
+                      webmapHasTimeSlider = true;
+                    } else {
+                      console.log(esriNS.version, "-- no timeslider properties.");
+                    }
+                  });
+                } else { // 4.21 and older
+                  console.log(esriNS.version, "-- no timeslider smartness before 4.22, checking oldstyle");
+                  if (map.widgets && map.widgets.timeSlider) {
+                    const timeSlider = new TimeSlider({
+                      container: "timeSlider",
+                      view: view,
+                      timeVisible: true,
+                      fullTimeExtent: map.widgets.timeSlider.fullTimeExtent,
+                      playRate: map.widgets.timeSlider.thumbMovingRate
+                    });
+                    if (map.widgets.timeSlider.stopInterval) {
+                      console.log(esriNS.version, "time stops by interval:", map.widgets.timeSlider.stopInterval.value, map.widgets.timeSlider.stopInterval.unit);
+                      timeSlider.stops = {
+                        interval: map.widgets.timeSlider.stopInterval
+                      }
+                    } else if (map.widgets.timeSlider.numStops) {
+                      console.log(esriNS.version, "time stops by count:", map.widgets.timeSlider.numStops);
+                      timeSlider.stops = {
+                        count: map.widgets.timeSlider.numStops
+                      }
+                    } else {
+                      console.log(esriNS.version, "unknown stops....\tmap.widgets.timeSlider:", map.widgets.timeSlider);
+                    }
+                    view.ui.add(timeSlider, "manual");
+                    webmapHasTimeSlider = true;
+                  }
+                }
+                console.log(esriNS.version, "-- webmap (version " + map.resourceInfo.version +
+                  ") with " + map.resourceInfo.operationalLayers.length + " operational layers and " +
+                  map.resourceInfo.baseMap.baseMapLayers.length + " basemap layers.");
+                // console.log(esriNS.version, map.resourceInfo);
+                // if bookmarks, add bookmark widget
+                if (map.bookmarks && map.bookmarks.length) {
+                  console.log(esriNS.version, "-- webmap has", map.bookmarks.length, "bookmarks.");
+                  addBookmarkWidgetExpanded();
+                } else {
+                  if (editbookmarks && editbookmarks != 'false') {
+                    console.log(esriNS.version, "-- editbookmarks:", editbookmarks);
+                    addBookmarkWidgetExpanded();
+                  }
+                  debug && console.log(esriNS.version, "No bookmarks in this webmap.");
+                }
+                if (show.includes("editor")) {
+                  addEditorWidgetExpanded();
+                }
+                if (show.includes("basemaptoggle")) {
+                  addBasemapToggleWidget();
+                }
+              })
+                .catch(function (error) {
+                  versionDiv.innerHTML += "<font color='red'><br><br><i>Hmm, we got a problem!</i><br><br>";
+                  if (error.name) {
+                    versionDiv.innerHTML += "<b>name:</b> " + error.name + "<br>";
+                  }
+                  if (error.message) {
+                    versionDiv.innerHTML += "<b>message:</b> " + error.message + "<br>";
+                  }
+                  if (error.details) {
+                    versionDiv.innerHTML += "<b>details:</b> " + JSON.stringify(error.details) + "<br>";
+                  }
+                });
+              const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                padding: {
+                  bottom: 40 // Same value as the #footerDiv height in CSS,
+                }
+              });
+              view.when(function () {
+
+                  if (esriNS.version >= 4.18) { // ElevationProfile was added in 4.18
+                    require(["esri/widgets/ElevationProfile"], (ElevationProfile) => {
+                      // make sure map has "ground"
+                      map.ground = "world-topobathymetry"; // or "world-elevation";
+                      const elevationProfile = new ElevationProfile({
+                        view: view
+                      });
+                      view.ui.add(elevationProfile, "bottom-right");
+                    });
+                  } else {
+                    console.log(esriNS.version, "-- ElevationProfile is NOT supported at " + esriNS.version + " (it requires 4.18+).")
+                  }
+
+                if (esriNS.version >= 4.23) {
+                  require(["esri/core/reactiveUtils"], (reactiveUtils) => {
+                    reactiveUtils.watch(
+                      () => view.stationary,
+                      (stationary) => {
+                        scaleDiv.innerHTML = "1:" + view.scale;
+                        scaleDiv.style.display = "block";
+                        if (typeof view.zoom) {
+                          if (view.zoom == "-1") {
+                            zoomDiv.innerHTML = "No LODs";
+                            zoomDiv.style.display = "block";
+                          } else {
+                            zoomDiv.innerHTML = "L:" + view.zoom;
+                            zoomDiv.style.display = "block";
+                          }
+                        } else {
+                          console.log(esriNS.version, "No view.zoom for some reason...");
+                        }
+                      }); // end reactiveUtils
+                  });
+                } else {
+                  require(["esri/core/watchUtils"], (watchUtils) => {
+                    watchUtils.whenTrue(view, "stationary", function () {
+                      scaleDiv.innerHTML = "1:" + view.scale;
+                      scaleDiv.style.display = "block";
+                      if (typeof view.zoom) {
+                        if (view.zoom == "-1") {
+                          zoomDiv.innerHTML = "No LODs";
+                          zoomDiv.style.display = "block";
+                        } else {
+                          zoomDiv.innerHTML = "L:" + view.zoom;
+                          zoomDiv.style.display = "block";
+                        }
+                      } else {
+                        console.log(esriNS.version, "No view.zoom for some reason...");
+                      }
+                    }); // end watchUtils
+                  });
+                }
+                const expandInfo = new Expand({
+                  view: view,
+                  expandTooltip: "webmap metadata",
+                  // style='background-color: #f3f0f0;'
+                  content: "<div class='esri-widget' style='width:400px;padding:3px;border:thin solid darkgray;border-radius:9px;'>WebMap title: " +
+                    "<a target='_blank' href='" + esriConfig.portalUrl + "/home/item.html?id=" + webmapId + "'>" +
+                    map.portalItem.title + "</a><br>" +
+                    "Created: " +
+                    new Date(map.portalItem.created).toLocaleString() +
+                    "<br>" +
+                    "Last modified: " +
+                    new Date(map.portalItem.modified).toLocaleString() +
+                    "<br>" +
+                    "Owner: " + map.portalItem.owner + "</div>",
+                  expanded: true
+                });
+                view.ui.add(expandInfo, {
+                  position: "top-left",
+                  index: 0
+                });
+                let layerCount = 0;
+                map.layers.items.forEach(function (layer) {
+                  console.log(esriNS.version, '----', ++layerCount + ". '" + layer.type + "' layer: ", layer.title, "--", layer.id);
+                  if (layer.type == "feature" && layer.source) { // FEATURECOLLECTION
+                    if (layer.url) {
+                      console.log(esriNS.version, "------ Service-based FL on the way", layer);
+                    } else if (layer.source) {
+                      console.log(esriNS.version, "------ Featurecollection FL on the way?", layer);
+                    } else {
+                      console.log(esriNS.version, "------ Hmm, what FL is on the way?", layer);
+                    }
+                    view.whenLayerView(layer).then(function (layerView) {
+                      if (layer && layer.source && layer.source.items) {
+                        console.log(esriNS.version, "------ items in featurecollection", layer.source.items.length);
+                        // the storymaps FC
+                        /* console.log("layer.source.items", layer.source.items);*/
+                        layer.source.items.forEach(function (item) {
+                          // console.log("item", item.attributes);
+                          if (item.attributes["No_Storeys"]) {
+                            console.log(esriNS.version, "item", item.attributes["GlobalID"], "has", item.attributes["No_Storeys"]);
+                          }
+                        });
+                      }
+                    });
+                  }
+                  if (layer.loadError) {
+                    var error = layer.loadError;
+                    if (error.name === 'layer:unknown-layer-type') {
+                      versionDiv.innerHTML += "<font color='red'><br><br><i>unknown layer type</i><br><br>";
+                      if (error.name) {
+                        versionDiv.innerHTML += "<b>name:</b> " + error.name + "<br>";
+                      }
+                      if (error.message) {
+                        versionDiv.innerHTML += "<b>message:</b> " + error.message + "<br>";
+                      }
+                      if (error.details) {
+                        versionDiv.innerHTML += "<b>details:</b> " + JSON.stringify(error.details) + "<br>";
+                      }
+                      console.log("layer", layer.loadError);
+                    } else {
+                      console.log("layer", layer.loadError);
+                      // can happen if secure service, but cancelling sign-in ??
+                    }
+                  } else { // else no loadError
+                    if (layer.accessInformation) {
+                      console.log(esriNS.version, "layer.accessInformation:", layer.accessInformation);
+                    }
+                    if (layer.portalItem) {
+                      console.log(esriNS.version, "layer.portalItem:", layer.portalItem);
+                    }
+                  }
+                }); // end map...foreach
+                const compass = new Compass({
+                  view: view
+                });
+                const home = new Home({
+                  view: view
+                });
+                view.ui.add([home, compass], "top-left");
+                const expandLayerList = new Expand({
+                  view: view,
+                  content: new LayerList({
+                    view: view
+                  })
+                });
+                const expandLegend = new Expand({
+                  view: view,
+                  content: new Legend({
+                    view: view
+                  }),
+                  group: "bottomrightgroup"
+                });
+                const expandPrint = new Expand({
+                  view: view,
+                  content: new Print({
+                    view: view
+                  })
+                });
+                const expandSearch = new Expand({
+                  view: view,
+                  content: new Search({
+                    view: view
+                  })
+                });
+                view.ui.add([expandSearch, expandPrint], {
+                  position: "top-right"
+                });
+                view.ui.add([expandLegend], {
+                  position: "bottom-right"
+                });
+                const scaleBar = new ScaleBar({
+                  view: view,
+                  unit: "dual"
+                });
+                view.ui.add(scaleBar, {
+                  position: "bottom-right"
+                });
+                view.ui.add([expandLayerList], {
+                  position: "bottom-left"
+                });
+              }); // end view.when
+              versionDiv.innerHTML = "v" + esriNS.version;
+              versionDiv.style.display = "block";
+
+              function addBookmarkWidgetExpanded() {
+                const expandBookmarks = new Expand({
+                  view: view,
+                  content: new Bookmarks({
+                    view: view,
+                    editingEnabled: editbookmarks
+                  }),
+                  expanded: false,
+                  group: "goodidea"
+                });
+                view.ui.add(expandBookmarks, {
+                  position: "top-right"
+                });
+              }
+
+              function addEditorWidgetExpanded() {
+                const expandEditor = new Expand({
+                  view: view,
+                  content: new Editor({
+                    view: view
+                  }),
+                  expanded: true,
+                  group: "bottomrightgroup"
+                });
+                view.ui.add(expandEditor, {
+                  position: "bottom-right"
+                });
+              }
+
+              function addBasemapToggleWidget() {
+                const basemapToggle = new BasemapToggle({
+                  view: view,
+                  nextBasemap: "osm"
+                });
+                view.ui.add(basemapToggle, "bottom-right");
+              }
+            }); // end require
+</script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="timeSlider"></div>
+    <div id="scaleDiv" class="esri-widget" style="display:none;"></div>
+    <div id="zoomDiv" class="esri-widget" style="display:none"></div>
+    <div id="versionDiv" class="esri-widget" style="display:none">v 4.x</div>
+    <div id="footerDiv" class="esri-widget"></div>
+  </div>
+</body>
+
+</html>
