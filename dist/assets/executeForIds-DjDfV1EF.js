@@ -1,1 +1,0 @@
-import{a7 as r,bw as c}from"./index-CC72Q5ax.js";import{S as f,p as i}from"./query-lSI4e_aN.js";async function u(a,t,o){const n=r(a),{data:s}=await f(n,c.from(t),o);return s.count}async function e(a,t,o){const n=r(a),{data:s}=await i(n,c.from(t),o);return s.objectIds}export{e as a,u as s};
