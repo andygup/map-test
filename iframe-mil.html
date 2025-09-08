@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Hello world test app | MapImageLayer</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/next/esri/themes/light/main.css" />
+
+  <script src="https://js.arcgis.com/next/"></script>
+
+  <script type="module">
+    const [MapView, Map, MapImageLayer] = await $arcgis.import([
+      "@arcgis/core/views/MapView.js",
+      "@arcgis/core/Map.js",
+      "@arcgis/core/layers/MapImageLayer.js",
+    ]);
+
+    const layer = new MapImageLayer({
+      url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Elevation/GlacierBay/MapServer",
+      minScale: 2000000,
+      sublayers: [
+        {
+          id: 1,
+          title: "hillshade",
+          source: {
+            // indicates the source of the sublayer is a dynamic data layer
+            type: "data-layer",
+            // this object defines the data source of the layer
+            // in this case it's a raster located in a registered workspace
+            dataSource: {
+              type: "raster",
+              workspaceId: "GlacierBayID",
+              dataSourceName: "gb_hillshade",
+            },
+          },
+        },
+        {
+          id: 0,
+          title: "dem",
+        },
+      ],
+    });    
+    const map = new Map({
+      basemap: "streets-navigation-vector",
+      layers: [layer],
+    });
+
+    const view = new MapView({
+      map: map,
+      container: "viewDiv",
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
