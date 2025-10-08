@@ -1,0 +1,201 @@
+0
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>MapImageLayer - raster data source | Sample | ArcGIS Maps SDK for JavaScript 4.33</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.33/esri/themes/light/main.css" />
+  <script src="https://jsdev.arcgis.com/4.34/"></script>
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #viewDiv {
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: 0;
+      bottom: 100px;
+    }
+
+    #footer {
+      position: absolute;
+      bottom: 0;
+      height: 100px;
+      width: 100%;
+      text-align: center;
+      padding: 0 50px 0 50px;
+    }
+
+    #slider {
+      width: 100%;
+      padding: 0;
+      height: 35px;
+    }
+  </style>
+
+  <script type="module">
+    const [Map, MapView, MapImageLayer, Slider] = await $arcgis.import([
+      "@arcgis/core/Map.js",
+      "@arcgis/core/views/MapView.js",
+      "@arcgis/core/layers/MapImageLayer.js",
+      "@arcgis/core/widgets/Slider.js",
+    ]);
+    /*****************************************************************
+     * Create a MapImageLayer instance with two sublayers. Both are
+     * rasters. The first comes from a registered database and the second
+     * is a map service layer.
+     *****************************************************************/
+    /*****************************************************************
+     * Add the layer to a map
+     *****************************************************************/
+    const map = new Map({
+      basemap: "hybrid",
+    });
+    // for (let i = 0; i < 4; i++) {
+    const layer = new MapImageLayer({
+      url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Elevation/GlacierBay/MapServer",
+      minScale: 2000000,
+      sublayers: [{
+        id: 1,
+        title: "hillshade",
+        source: {
+          // indicates the source of the sublayer is a dynamic data layer
+          type: "data-layer",
+          // this object defines the data source of the layer
+          // in this case it's a raster located in a registered workspace
+          dataSource: {
+            type: "raster",
+            workspaceId: "GlacierBayID",
+            dataSourceName: "gb_hillshade",
+          },
+        },
+      },
+      {
+        id: 0,
+        title: "dem",
+      },
+      ],
+    });
+    map.layers.push(layer)
+    // }
+
+    const view = new MapView({
+      container: "viewDiv",
+      map: map,
+      center: [-136.89746, 58.496968],
+      zoom: 13,
+    });
+
+    /** Begin Custom JS Code **/
+    const startWorkflowBtn = document.getElementById("startWorkflow");
+    // Disable workflow button until it's ready to use.
+    startWorkflowBtn.disabled = true;
+    const workflowTimerDisplayEl = document.getElementById("workflowTimerDisplay");
+    // Initialize timer display.
+    updateWorkflowTimerDisplay();
+
+    function updateWorkflowTimerDisplay() {
+      workflowTimerDisplayEl.textContent = formatMMSS(getWorkflowTimerSeconds());
+    }
+
+    function formatMMSS(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function getWorkflowTimerSeconds() {
+      return parseInt(localStorage.getItem("workflowTimer")) || 0;
+    }
+
+    function setWorkflowTimerSeconds(newWorkflowTimerSeconds) {
+      localStorage.setItem("workflowTimer", newWorkflowTimerSeconds);
+      updateWorkflowTimerDisplay();
+    }
+    view.when(() => {
+      startWorkflowBtn.disabled = false;
+    });
+    let workflowTimerIntervalId = null;
+    let workflowRunning = false;
+    startWorkflowBtn.addEventListener("click", () => {
+      startWorkflowBtn.disabled = true;
+      // Reset stored timer.
+      setWorkflowTimerSeconds(0);
+      // Update timer every second.
+      workflowTimerIntervalId = setInterval(() => {
+        setWorkflowTimerSeconds(getWorkflowTimerSeconds() + 1);
+      }, 2000);
+      startLoop();
+    });
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    // Capture the original center.
+    const originalCenter = view.center.clone();
+    // Define how far and how fast to pan.
+    const panOffset = {
+      longitude: 0.01, // Adjust this for horizontal pan distance.
+      latitude: 0 // Adjust this for vertical pan distance.
+    };
+    async function startLoop() {
+      workflowRunning = true;
+      // Infinite pan loop.
+      while (workflowRunning) {
+        await panLoop();
+      }
+      async function panLoop() {
+        // Pan away.
+        await view.goTo({
+          center: [
+            originalCenter.longitude + panOffset.longitude,
+            originalCenter.latitude + panOffset.latitude
+          ]
+        });
+        await sleep(4000);
+        // Pan back.
+        await view.goTo({
+          center: [
+            originalCenter.longitude,
+            originalCenter.latitude
+          ]
+        });
+        await sleep(4000);
+      }
+    }
+
+    function stopLoop() {
+      workflowRunning = false;
+    }
+    const stopWorkflowBtn = document.getElementById("stopWorkflow");
+    stopWorkflowBtn.addEventListener("click", () => {
+      stopLoop();
+      clearInterval(workflowTimerIntervalId);
+      startWorkflowBtn.disabled = false;
+    });
+    /** End Custom JS Code **/
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="footer" class="esri-widget">
+    <!-- Begin Custom HTML Code -->
+    <button id="startWorkflow">Start Workflow</button>
+    <label>Uptime: </label><span id="workflowTimerDisplay"></span>
+    <button id="stopWorkflow">Stop Workflow</button>
+    <!-- End Custom HTML Code -->
+
+    <h3>Digital Elevation Model (DEM) opacity</h3>
+    <div id="slider"></div>
+  </div>
+</body>
+
+</html>
