@@ -1,0 +1,1 @@
+import{RS as e}from"./index-ByaFsVj4.js";async function t(t,n){return(await e(t,{responseType:`image`,...n})).data}export{t};

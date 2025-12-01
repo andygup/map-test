@@ -1,0 +1,1 @@
+import{OT as e,gD as t}from"./index-ByaFsVj4.js";var n=n=>{let r=n,i=class extends r{get highlightOptions(){}set highlightOptions(e){}};return i=t([e(`esri.views.layers.HighlightLayerViewMixin`)],i),i};export{n as t};
