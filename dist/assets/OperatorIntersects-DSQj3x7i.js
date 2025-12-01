@@ -1,1 +1,0 @@
-import{Et as e,b as t}from"./SpatialReference-Cd_hfGxp.js";var n=class extends t{getOperatorType(){return 4}execute(t,n,r,i){return!e(t,n,r,4,i)}};export{n as t};

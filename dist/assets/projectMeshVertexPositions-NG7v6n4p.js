@@ -1,1 +1,0 @@
-import{Gg as e,_S as t}from"./index-ByaFsVj4.js";import{n}from"./MeshLocalVertexSpace-UBa2rGXG.js";import{n as r}from"./vertexSpaceConversion-h_-BmbPw.js";function i(i,a){let o=r(i,n.absolute);if(!o)return null;let s=o.position;return t(i.spatialReference,a)||(s=new Float64Array(o.position.length),e(o.position,i.spatialReference,0,s,a,0))?s:null}export{i as t};

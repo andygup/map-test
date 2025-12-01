@@ -1,0 +1,1 @@
+import{ol as e}from"./index-CzMixifc.js";import{n as t}from"./LineSnappingHint-C4TfMb_L.js";var n=class n extends t{constructor(e,t,n){super(t,n),this.point=e}equals(t){return t instanceof n&&e(this.point,t.point)}};export{n as t};

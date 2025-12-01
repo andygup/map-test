@@ -1,0 +1,1 @@
+import{ha as e,hu as t,rd as n}from"./index-CzMixifc.js";import{o as r}from"./query-BeU-rNp1.js";async function i(t,n,r,i){let o=await a(t,n,r,i);return e.fromJSON(o)}function a(e,i,a,o){let s=t(e),c={...a},l=n.from(i);return r(s,l,l.sourceSpatialReference,c,o)}export{i as n,a as t};

@@ -1,0 +1,1 @@
+import{DT as e,OT as t,gD as n,hw as r,px as i}from"./index-CzMixifc.js";var a=class extends r{constructor(e){super(e),this.sourcePoint=null,this.mapPoint=null}};n([e()],a.prototype,`sourcePoint`,void 0),n([e({type:i})],a.prototype,`mapPoint`,void 0),a=n([t(`esri.layers.support.ControlPoint`)],a);export{a as t};

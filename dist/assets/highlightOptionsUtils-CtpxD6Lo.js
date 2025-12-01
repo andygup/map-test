@@ -1,1 +1,0 @@
-import{qu as e}from"./index-ByaFsVj4.js";function t(e){return e?.name??`default`}export{t};

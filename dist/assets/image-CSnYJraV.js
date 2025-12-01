@@ -1,0 +1,1 @@
+import{RS as e}from"./index-CzMixifc.js";async function t(t,n){return(await e(t,{responseType:`image`,...n})).data}export{t};

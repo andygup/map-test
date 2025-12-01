@@ -1,0 +1,1 @@
+import{Ag as e,Gg as t,Og as n,c_ as r,jg as i}from"./index-CzMixifc.js";function a(e,r,a){if(n(e.spatialReference,a))return s[0]=e.x,s[1]=e.y,s[2]=e.z??0,t(s,e.spatialReference,0,r,a,0);let o=i(e,a);return!!o&&(r[0]=o.x,r[1]=o.y,r[2]=o.z??0,!0)}async function o(t,n,r,i){return await e(t.spatialReference,r,null,i),a(t,n,r)}var s=r();export{a as n,o as t};

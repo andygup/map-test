@@ -1,0 +1,1 @@
+import{Ih as e}from"./index-CzMixifc.js";function t(t,n){return t===null?n:new e({url:t.field(`url`)})}export{t};

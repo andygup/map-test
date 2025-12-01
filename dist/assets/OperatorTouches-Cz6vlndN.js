@@ -1,0 +1,1 @@
+import{Et as e,b as t}from"./SpatialReference-BzfAMI5E.js";var n=class extends t{getOperatorType(){return 5}execute(t,n,r,i){return e(t,n,r,8,i)}};export{n as t};
