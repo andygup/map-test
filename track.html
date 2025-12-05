@@ -6,15 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>@arcgis/map-components</title>
   <link rel="icon" href="data:;base64,=" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: row;
-      margin: 0;
-    }
+  <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css" />
+  <!-- Load Calcite Design System -->
+  <script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
 
-    arcgis-map {
-      min-height: 100vh;
+  <!-- Load the JavaScript Maps SDK core API -->
+  <script src="https://js.arcgis.com/4.34/"></script>
+
+  <!-- Load the JavaScript Maps SDK Map components or other component packages -->
+  <script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
     }
   </style>
 </head>
@@ -24,10 +29,9 @@
     <arcgis-track slot="top-right"></arcgis-track>
   </arcgis-map>
 
-  <script>
-    window.arcgisMap = document.querySelector("arcgis-map");
-    window.arcgisTrack = document.querySelector("arcgis-track");
-    const arcgisTrack = window.arcgisTrack;
+  <script type="module">
+    const arcgisMap = document.querySelector("arcgis-map");
+    const arcgisTrack = document.querySelector("arcgis-track");
 
     arcgisTrack.geolocationOptions = {
       maximumAge: 0,
@@ -43,6 +47,9 @@
       console.log("Position update:", v.position);
       return true;
     };
+
+    await arcgisTrack.componentOnReady();    
+    console.log("Track component is ready");
   </script>
 </body>
 
