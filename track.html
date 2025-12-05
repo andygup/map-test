@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@arcgis/map-components</title>
+  <link rel="icon" href="data:;base64,=" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: row;
+      margin: 0;
+    }
+
+    arcgis-map {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <arcgis-map item-id="459a495fc16d4d4caa35e92e895694c8">
+    <arcgis-track slot="top-right"></arcgis-track>
+  </arcgis-map>
+
+  <script>
+    window.arcgisMap = document.querySelector("arcgis-map");
+    window.arcgisTrack = document.querySelector("arcgis-track");
+    const arcgisTrack = window.arcgisTrack;
+
+    arcgisTrack.geolocationOptions = {
+      maximumAge: 0,
+      timeout: 15000,
+      enableHighAccuracy: true,
+    };
+
+    arcgisTrack.addEventListener("track-start", (event) => {
+      console.log("Track started:", event);
+    });
+    
+    arcgisTrack.positionFilterFunction = (v) => {
+      console.log("Position update:", v.position);
+      return true;
+    };
+  </script>
+</body>
+
+</html>
