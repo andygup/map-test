@@ -1,0 +1,1 @@
+import{BT as e,Ex as t,Ow as n,VT as r,kD as i}from"./index-BN8X5Ryz.js";var a=class extends n{constructor(e){super(e),this.sourcePoint=null,this.mapPoint=null}};i([e()],a.prototype,`sourcePoint`,void 0),i([e({type:t})],a.prototype,`mapPoint`,void 0),a=i([r(`esri.layers.support.ControlPoint`)],a);export{a as t};

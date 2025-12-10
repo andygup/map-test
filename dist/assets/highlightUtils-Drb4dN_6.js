@@ -1,1 +1,0 @@
-import{JE as e,Zp as t,iv as n}from"./index-CZ4oMP1N.js";function r(r){if(!r)return[];let i=t(r)?[r]:n.isCollection(r)?r.toArray():Array.isArray(r)?r:[];return i=i?.filter(e),(i?.length??0)===0?[]:i}function i(e){return!!(e&&typeof e==`object`&&`pixelRanges`in e&&e.pixelRanges)}function a(e){return Array.isArray(e.pixelRanges)&&e.pixelRanges.length===0}export{a as n,r,i as t};

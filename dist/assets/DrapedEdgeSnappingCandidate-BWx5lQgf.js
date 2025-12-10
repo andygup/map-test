@@ -1,1 +1,0 @@
-import{t as e}from"./LineSnappingHint-BOeMI0cS.js";import{t}from"./constraints-Bf0IRs4G.js";import{n}from"./EdgeSnappingCandidate-BfgKjc_Z.js";var r=class extends n{constructor(e){super({...e,isDraped:!0,constraint:new t(e.edgeStart,e.edgeEnd,e.getGroundElevation)})}get hints(){return[new e(1,this.constraint.start,this.constraint.end,this.isDraped,this.domain)]}};export{r as t};

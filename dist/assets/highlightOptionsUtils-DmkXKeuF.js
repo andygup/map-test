@@ -1,0 +1,1 @@
+import{rd as e}from"./index-BN8X5Ryz.js";function t(e){return e?.name??`default`}export{t};

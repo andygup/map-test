@@ -1,1 +1,0 @@
-import{Ih as e}from"./index-CZ4oMP1N.js";function t(t,n){return t===null?n:new e({url:t.field(`url`)})}export{t};

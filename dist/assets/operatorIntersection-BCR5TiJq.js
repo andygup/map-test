@@ -1,1 +1,0 @@
-import{Kt as e}from"./SpatialReference-HLIf1Z5k.js";import{t}from"./SimpleGeometryCursor-5wFw2ZZo.js";var n=new e;function r(e,t){return n.accelerateGeometry(e,t,1)}function i(e,t,r){return n.execute(e,t,r,null)}function a(e,r,i,a){let o=n.executeMany(new t(e),new t([r]),i,null,a);return Array.from(o)}function o(){return n.supportsCurves()}export{a as i,o as n,r,i as t};
