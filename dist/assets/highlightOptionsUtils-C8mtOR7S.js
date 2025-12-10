@@ -1,0 +1,1 @@
+import{qu as e}from"./index-CZ4oMP1N.js";function t(e){return e?.name??`default`}export{t};

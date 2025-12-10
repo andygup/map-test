@@ -1,1 +1,0 @@
-import{Ml as e,ag as t,c_ as n}from"./index-CzMixifc.js";import{c as r}from"./elevationInfoUtils-BcUBf70F.js";function i(t,i,o,s,c=n()){let l=e(a,t);return l[2]=r(s,l,i,o)||0,s.renderCoordsHelper.toRenderCoords(l,i,c),c}var a=n();t(),t();export{i as t};

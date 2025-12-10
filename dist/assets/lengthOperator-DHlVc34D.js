@@ -1,0 +1,1 @@
+import{Px as e}from"./index-CZ4oMP1N.js";import{r as t,t as n}from"./apiConverter-BH2GqpH4.js";function r(r,i={}){let{unit:a}=i,o=t(r).calculateLength2D();if(o&&a){let t=n(r);o=e(o,t,a)}return o}var i=!0,a=Object.freeze(Object.defineProperty({__proto__:null,execute:r,supportsCurves:!0},Symbol.toStringTag,{value:`Module`}));export{r as n,i as r,a as t};

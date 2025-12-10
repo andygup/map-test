@@ -1,0 +1,1 @@
+import"./Point2D-7VmvyXN4.js";import"./Envelope2D-Cwxt0azx.js";import{Mt as e}from"./SpatialReference-HLIf1Z5k.js";import"./Transformation2D-CPSmiNnd.js";import"./SimpleGeometryCursor-5wFw2ZZo.js";import"./OperatorDefinitions-CscAnk1m.js";export{e as OperatorProject};
