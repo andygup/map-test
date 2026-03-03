@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Blank View issue - #3575</title>
+
+  <link id="theme" rel="stylesheet" href="https://js.arcgis.com/5.0/esri/themes/light/main.css" />
+
+  <script type="importmap">
+      {
+        "imports": {
+          "esri/": "https://js.arcgis.com/5.0/@arcgis/core/",
+          "@arcgis/core/": "https://js.arcgis.com/5.0/@arcgis/core/"
+        }
+      }
+    </script>
+
+  <script type="module">
+    globalThis.esriConfig = { portalUrl: "https://etait.esri.com/portal" };
+  </script>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@esri/calcite-components@5.0.2/dist/cdn/index.js"></script>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <style>
+    calcite-tab {
+      height: 600px;
+    }
+  </style>
+
+  <calcite-tabs style="height: 80%">
+    <calcite-tab-nav slot="title-group">
+      <calcite-tab-title selected> Watercraft </calcite-tab-title>
+      <calcite-tab-title>Automobiles</calcite-tab-title>
+      <calcite-tab-title>Aircraft</calcite-tab-title>
+    </calcite-tab-nav>
+    <calcite-tab selected>
+      <calcite-notice icon="embark" open> </calcite-notice>
+      <div id="viewDiv1" style="width: 100%; height: 500px"></div>
+    </calcite-tab>
+    <calcite-tab>
+      <calcite-notice icon="car" open> </calcite-notice>
+      <div id="viewDiv2" style="height: 500px; width: 100%"></div>
+    </calcite-tab>
+    <calcite-tab>
+      <calcite-notice icon="plane" open> </calcite-notice>
+      <div id="viewDiv3" style="height: 500px; width: 100%"></div>
+    </calcite-tab>
+  </calcite-tabs>
+
+  <script type="module">
+    //# sourceURL=play-app.js
+    import WebMap from "@arcgis/core/WebMap.js";
+    import MapView from "@arcgis/core/views/MapView.js";
+
+    const webmap = new WebMap({
+      portalItem: {
+        id: "77e16bdb8ed1413baffde5675ece06b2",
+      },
+    });
+
+    const view1 = new MapView({
+      container: "viewDiv1",
+      map: webmap,
+    });
+
+    const view2 = new MapView({
+      container: "viewDiv2",
+      map: webmap,
+    });
+
+    const view3 = new MapView({
+      container: "viewDiv3",
+      map: webmap,
+    });
+  </script>
+</body>
+
+</html>
