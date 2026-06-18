@@ -1,1 +1,0 @@
-import {S as _s,r as r$1}from'./main-Y4UOJ3OT.js';async function o(r,t){return (await _s(r,r$1({responseType:"image"},t))).data}export{o};

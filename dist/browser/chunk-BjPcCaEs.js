@@ -1,1 +1,0 @@
-import {g0 as c}from'./main-Y4UOJ3OT.js';var t=null;async function o(){return t||(t=n()),t}async function n(){let a=await import('./chunk-B96LWj6Z.js');return await a.default({module_or_path:c("esri/libs/parquet/pkg/bundle_bg.wasm")}),a}export{o};

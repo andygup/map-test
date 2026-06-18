@@ -1,0 +1,1 @@
+import{c as i}from"./chunk-6TMBWIBA.js";var t=15.5,e=4,o=64,l=1024,s={outlineWidth:.75,referenceWidth:.75,cap:i.CIMSolidStroke.capstyle,join:i.CIMSolidStroke.joinstyle,miterLimit:i.CIMSolidStroke.miterlimit};export{t as a,e as b,o as c,l as d,s as e};

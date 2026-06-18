@@ -1,1 +1,0 @@
-import {fK as v,fp as C}from'./main-Y4UOJ3OT.js';function s(e){return v(e)||C(e)?0:1}export{s};

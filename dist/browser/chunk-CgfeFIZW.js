@@ -1,1 +1,0 @@
-import {gQ as f}from'./main-Y4UOJ3OT.js';function i(e){return e?.name??f}export{i};

@@ -1,0 +1,1 @@
+import{a as n,b as a}from"./chunk-3ECGFAOV.js";import{q as r}from"./chunk-NB5PP7ZL.js";function l(t,c={}){let{unit:o}=c,e=a(t).calculateLength2D();if(e&&o){let s=n(t);e=r(e,s,o)}return e}var u=!0,p=Object.freeze(Object.defineProperty({__proto__:null,execute:l,supportsCurves:u},Symbol.toStringTag,{value:"Module"}));export{l as a,u as b,p as c};

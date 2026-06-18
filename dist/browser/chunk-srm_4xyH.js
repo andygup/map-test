@@ -1,1 +1,0 @@
-import {N}from'./chunk-BvcHV_Hy.js';import {js as m}from'./main-Y4UOJ3OT.js';var t=new N;function p(e,r,n){return t.execute(e,r,n,null)}function f(e,r,n){let s=t.executeMany(new m(e),r,n,null);return Array.from(s)}function i(){return t.supportsCurves()}export{f,i,p};

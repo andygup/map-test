@@ -1,1 +1,0 @@
-import {k}from'./chunk-p_PhiSaw.js';var e=class extends k{constructor(r,s,o,f=35044){super(r,34962,f,o),this.layout=s;}};export{e};

@@ -1,1 +1,0 @@
-import {P}from'./chunk-BxIAsoF3.js';import r from'./chunk-GF-Rpeob.js';import {gB as S,r as r$1,as as c}from'./main-Y4UOJ3OT.js';async function Q(m,s,f,p){let u=S(m),i=r$1({},p),{data:c$1}=await P(u,r.from(s),f,i);return c.fromJSON(c$1)}export{Q as executeTopFeaturesQuery};

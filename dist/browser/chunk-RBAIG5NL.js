@@ -1,0 +1,1 @@
+import{f as a}from"./chunk-T64I4Y3G.js";import{a as t}from"./chunk-W6IHQLRV.js";function o(i){return i.map(e=>{let r=e.editedFeatures,d=t.fromJSON(r?.spatialReference);return r?{layerId:e.id,editedFeatures:a(r,d)}:null}).filter(e=>e!==null)}export{o as a};

@@ -1,1 +1,0 @@
-import {w}from'./chunk-CYIoGNNM.js';var d={getObjectId:t=>t.objectId,getAttributes:t=>t.attributes,getAttribute:(t,e)=>t.attributes[e],cloneWithGeometry:(t,e,i)=>new w(e,t.attributes,null,t.objectId,t.displayId,t.distance,t.vertexCount),getGeometry:t=>t.geometry,getCentroid:(t,e)=>t.ensureCentroid(e)};export{d};

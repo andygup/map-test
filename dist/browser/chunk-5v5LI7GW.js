@@ -1,2 +1,0 @@
-import {i}from'./chunk-CEIL54uh.js';import {hs as Oe,ah as y$1}from'./main-Y4UOJ3OT.js';function s(t){Oe(y$1.getLogger(t),"highlightOptions",{replacement:"View.highlights",version:"4.34",see:"https://arcg.is/inbTa1#highlights",warnOnce:true});}var h=class extends i{constructor(){super(...arguments),this.layer=null;}get highlightOptions(){return s(this),null}set highlightOptions(g){s(this);}};
-export{h};

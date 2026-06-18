@@ -1,1 +1,0 @@
-import {G}from'./chunk-BxIAsoF3.js';import r from'./chunk-GF-Rpeob.js';import {gB as S,r as r$1}from'./main-Y4UOJ3OT.js';async function f(a,u,n){let m=S(a);return (await G(m,r.from(u),r$1({},n))).data.count}export{f as executeForTopCount};

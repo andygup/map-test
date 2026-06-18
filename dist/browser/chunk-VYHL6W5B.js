@@ -1,0 +1,1 @@
+import{xa as i}from"./chunk-3T5OL636.js";var e=l=>l.lineSymbol?.style,m=(l,o)=>{o.lineSymbol??=i(),o.lineSymbol.style=l},n=l=>l.lineSymbol?.width,y=(l,o)=>{o.lineSymbol??=i(),o.lineSymbol.width=l};export{e as a,m as b,n as c,y as d};

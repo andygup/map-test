@@ -1,1 +1,0 @@
-import {s as se,z}from'./chunk-C4y3gUEo.js';function f(e,r){return r.push(e.buffer),{buffer:e.buffer,layout:new se(e.layout)}}function n(e){return new z(e.layout).createView(e.buffer)}export{f,n};

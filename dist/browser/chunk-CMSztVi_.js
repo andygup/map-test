@@ -1,1 +1,0 @@
-import {t as te}from'./chunk-Cmx7_bP2.js';import {aW as e}from'./main-Y4UOJ3OT.js';function o(i){return i.map(e$1=>{let r=e$1.editedFeatures,d=e.fromJSON(r?.spatialReference);return r?{layerId:e$1.id,editedFeatures:te(r,d)}:null}).filter(e=>e!==null)}export{o};
