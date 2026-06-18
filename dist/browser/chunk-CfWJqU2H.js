@@ -1,0 +1,1 @@
+var e={color:{write:[true,true,true,true],blendMode:"composite"},depth:false,stencil:false};export{e};

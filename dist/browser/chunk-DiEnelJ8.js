@@ -1,0 +1,1 @@
+import {pg as i}from'./main-Y4UOJ3OT.js';function r(e){if(typeof e=="string")return e.toLowerCase();if("name"in e)return e.name.toLowerCase();if(typeof e.value!="string")throw new i("InvalidIdentifier",null);return e.value.toLowerCase()}var n=Object.freeze({aborted:false});export{n,r};

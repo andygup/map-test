@@ -1,0 +1,1 @@
+import {ai as P,ak as vn,gv as I,ae as p$1,ah as y$1}from'./main-Y4UOJ3OT.js';var b=h=>{let f=h,e=class extends f{initialize(){this.addHandles(I(()=>this.layer,"refresh",l=>{this.doRefresh(l.dataChanged).catch(r=>{p$1(r)||y$1.getLogger(this).error(r);});}),"RefreshableLayerView");}};return e=P([vn("esri.views.layers.RefreshableLayerView")],e),e};export{b};

@@ -1,1 +1,0 @@
-import{ZS as e}from"./index-BN8X5Ryz.js";async function t(t,n){return(await e(t,{responseType:`image`,...n})).data}export{t};

@@ -1,0 +1,1 @@
+import {F,xI as u}from'./main-Y4UOJ3OT.js';function i(n,r){return n===r||n!=null&&r!=null&&F(n.spatialReference,r.spatialReference)&&n.x===r.x&&n.y===r.y&&n.z===r.z&&n.m===r.m}function s(n,r,t){return n===r||n!=null&&r!=null&&F(n.spatialReference,r.spatialReference)&&u(n.x,r.x,t)&&u(n.y,r.y,t)&&u(n.z??0,r.z??0,t)&&u(n.m??0,r.m??0,t)}export{i,s};

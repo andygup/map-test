@@ -1,0 +1,1 @@
+import {lb as Z8}from'./main-Y4UOJ3OT.js';var e=l=>l.lineSymbol?.style,m=(l,o)=>{o.lineSymbol??=Z8(),o.lineSymbol.style=l;},n=l=>l.lineSymbol?.width,y=(l,o)=>{o.lineSymbol??=Z8(),o.lineSymbol.width=l;};export{e,m,n,y};

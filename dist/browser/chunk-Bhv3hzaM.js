@@ -1,0 +1,1 @@
+import {qt as y}from'./main-Y4UOJ3OT.js';function i(e,r){return new Promise((o,n)=>{e.readyState>=HTMLMediaElement.HAVE_CURRENT_DATA?o():(r(y(e,"canplay",o)),r(y(e,"error",n)));})}export{i};

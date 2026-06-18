@@ -1,0 +1,1 @@
+import {S as _s,s as s$1,r as r$1}from'./main-Y4UOJ3OT.js';var c=/\.(\w+)$/;function p(e){let t=new URL(e).pathname.match(c);return !t||t.length<2?null:t[1].toUpperCase()}var l=async(e,t)=>{let r=await _s(e,s$1(r$1({},t),{method:"head"})),n=r?.getHeader?.("Content-Type");return n?n.split("/")[1]:null};export{l as getDatasetFormat,p as guessExtensionFromURI};

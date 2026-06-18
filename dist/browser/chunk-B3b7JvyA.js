@@ -1,0 +1,1 @@
+var a=.017453292519944444,e=3.14159265359/128;var i=1,n=1.1,o=1;var c=1e-5,d=.05;var b=1e-30;var p=4;var g=0,f=2,m=2,u=3,P=0,T=3,h=16777216,k=1.1,x=16,y=128,C=1,M=0,O=1,R=2;export{C,M,O,P,R,T,a,b,c,d,e,f,g,h,i,k,m,n,o,p,u,x,y};

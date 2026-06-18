@@ -1,0 +1,1 @@
+import {gP as o,al as oe,aA as T}from'./main-Y4UOJ3OT.js';function l(e){if(!e)return [];let r=o(e)?[e]:oe.isCollection(e)?e.toArray():Array.isArray(e)?e:[];return r=r?.filter(T),(r?.length??0)===0?[]:r}function g(e){return !!(e&&typeof e=="object"&&"pixelRanges"in e&&e.pixelRanges)}function p(e){return Array.isArray(e.pixelRanges)&&e.pixelRanges.length===0}export{g,l,p};

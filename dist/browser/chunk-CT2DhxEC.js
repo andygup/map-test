@@ -1,0 +1,1 @@
+import {oL as M,pO as Hn,qo as re,bV as o,bd as ce}from'./main-Y4UOJ3OT.js';function u(t,r,e,c){if(M(t.spatialReference,e))return n[0]=t.x,n[1]=t.y,n[2]=t.z??0,Hn(n,t.spatialReference,0,r,e,0);let o=re(t,e,c);return !!o&&(r[0]=o.x,r[1]=o.y,r[2]=o.z??0,true)}async function y(t,r,e,c){return await ce(t.spatialReference,e,null,c),u(t,r,e)}var n=o();export{u,y};

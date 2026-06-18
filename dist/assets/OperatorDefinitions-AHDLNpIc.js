@@ -1,1 +1,0 @@
-import{t as e}from"./OperatorDefinitions-C5Pat-Jx.js";export{e as NonSimpleResult};
