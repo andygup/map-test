@@ -1,0 +1,1 @@
+import{a}from"./chunk-N6ZEXPJM.js";import{C as s}from"./chunk-6DXT34WA.js";import{m as r}from"./chunk-6D3L3DUJ.js";var i=class e extends a{constructor(t,n,o=1){super(!1,o),this.start=t,this.curve=n}equals(t){return t instanceof e&&s(this.start,t.start)&&r(this.curve,t.curve)&&this.isDraped===t.isDraped&&this.domain===t.domain}};export{i as a};

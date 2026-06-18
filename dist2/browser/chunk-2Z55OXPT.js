@@ -1,0 +1,1 @@
+import{d as e}from"./chunk-OBCHEY7W.js";function u(n,s,t){let a=Math.sin(n),c=Math.cos(n),r=Math.sin(s),i=Math.cos(s),o=t;return o[0]=-a,o[4]=-r*c,o[8]=i*c,o[12]=0,o[1]=c,o[5]=-r*a,o[9]=i*a,o[13]=0,o[2]=0,o[6]=i,o[10]=r,o[14]=0,o[3]=0,o[7]=0,o[11]=0,o[15]=1,o}function h(n,s,t){return u(n,s,t),e(t,t),t}export{u as a,h as b};

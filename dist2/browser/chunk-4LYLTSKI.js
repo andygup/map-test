@@ -1,0 +1,1 @@
+import{l as r,v as s,w as i,x as o}from"./chunk-VPIZE4U5.js";var u=s(class extends i{constructor(){super(...arguments),this.key=r}render(t,e){return this.key=t,e}update(t,[e,m]){return e!==this.key&&(o(t),this.key=e),m}});export{u as a};

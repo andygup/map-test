@@ -1,0 +1,1 @@
+import{g as e}from"./chunk-L244EAZB.js";function i(){return e("curve-densification-coarse-segments")}function t(){return e("curve-densification-max-segments")}function r(){return e("curve-densification-min-segments")}function s(){return e("curve-densification-pixel-deviation")}export{i as a,t as b,r as c,s as d};

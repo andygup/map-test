@@ -1,0 +1,1 @@
+import{l as s}from"./chunk-N3DFTS7C.js";import{h as o}from"./chunk-ZRN3CKWB.js";import{b as c}from"./chunk-6DXT34WA.js";import{a as e}from"./chunk-7VB5JZ2H.js";function v(m,n,p,t,a=e()){let r=c(i,m);return r[2]=s(t,r,n,p)||0,t.renderCoordsHelper.toRenderCoords(r,n,a),a}var i=e(),C=o(),g=o();export{v as a};

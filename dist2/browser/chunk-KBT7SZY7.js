@@ -1,0 +1,1 @@
+import{c as e,v as t,w as a}from"./chunk-J6NVOZQI.js";function n(i){return typeof i=="object"&&i!=null&&"loaded"in i&&i.loaded===!0&&"type"in i}function d(i){return!(!n(i)||!t(i)?.operations?.supportsEditing||"editingEnabled"in i&&!a(i)||e(i))}export{d as a};
