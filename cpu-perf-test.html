@@ -80,7 +80,6 @@
 
       <div class="dt1">
         <div class="label">navigator.cpuPerformance</div>
-        <div id="cpu-tier">Checking...</div>
         <div id="cpu-description"></div>
       </div>
 
@@ -97,12 +96,12 @@
       const hasComputePressure = 'PressureObserver' in window;  
       console.log("hasComputePressure:", hasComputePressure);
 
-      const updateResults = () => {
-        document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
-        document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
-        console.log("Known sources", PressureObserver.knownSources);
-      };
-      updateResults();   
+      // const updateResults = () => {
+      //   document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
+      //   document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
+      //   console.log("Known sources", PressureObserver.knownSources);
+      // };
+      // updateResults();   
 
       // https://github.com/WICG/cpu-performance
 
@@ -116,10 +115,10 @@
 
       // Get a reference to the map component
       const viewElement = document.querySelector("arcgis-map");
-      const tierElement = document.getElementById('cpu-tier');
       const cpuDescriptionElement = document.getElementById('cpu-description');
-      cpuDescriptionElement.textContent = cpuValues[navigator.cpuPerformance];
-      const pressureElement = document.getElementById('pressure-state');  
+      cpuDescriptionElement.textContent = hasCpuPerformance ? cpuValues[navigator.cpuPerformance] : "Not supported";      
+      const pressureElement = document.getElementById('pressure-state'); 
+      pressureElement.textContent = hasComputePressure ? "Supported" : "Not supported";
 
       // Wait until the map view is ready
       await viewElement.viewOnReady();
@@ -127,6 +126,7 @@
       // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency
       document.getElementById("hardware-concurrency").textContent = navigator.hardwareConcurrency;
       console.log("Hardware concurrency:", navigator.hardwareConcurrency);
+      console.log("PressureObserver known sources:", PressureObserver.knownSources);
 
       const updateCpuPressure = (state) => {
         pressureElement.replaceChildren();
