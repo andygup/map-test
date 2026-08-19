@@ -9,6 +9,20 @@
     <script type="module" src="https://js.arcgis.com/5.1/"></script>
 
     <style>
+    :root {
+        color-scheme: light dark;
+        --bg: #f6f7f9;
+        --panel: #ffffff;
+        --border: #d8dde3;
+        --text: #1e2227;
+        --muted: #5a6470;
+        --accent: #2563eb;
+        --tier-0: #6b7280;
+        --tier-1: #ef4444;
+        --tier-2: #f59e0b;
+        --tier-3: #10b981;
+        --tier-4: #2563eb;
+      }      
       html,
       body {
         height: 100%;
@@ -46,6 +60,21 @@
       .tier-2 { background: var(--tier-2); }
       .tier-3 { background: var(--tier-3); }
       .tier-4 { background: var(--tier-4); }      
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.15rem 0.65rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }      
+      .pressure-nominal { background: #ffffff; color: #1e2227; border: 1px solid var(--border); }
+      .pressure-fair { background: var(--tier-3); color: white; }
+      .pressure-serious { background: var(--tier-2); color: white; }
+      .pressure-critical { background: var(--tier-1); color: white; }      
     </style>
   </head>
 
@@ -61,15 +90,14 @@
     </arcgis-map>
     <script type="module">
       const hasCpuPerformance = 'cpuPerformance' in navigator;
-      const hasComputePressure = 'PressureObserver' in window;
-      const cpuTier = navigator.cpuPerformance;      
+      const hasComputePressure = 'PressureObserver' in window;  
       console.log("hasComputePressure:", hasComputePressure);
 
       const updateResults = () => {
         document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
         document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
       };
-      updateResults();
+      updateResults();   
 
       // https://github.com/WICG/cpu-performance
       const getPresetFeatures = () => {
@@ -101,7 +129,8 @@
 
       // Get a reference to the map component
       const viewElement = document.querySelector("arcgis-map");
-      const tierElement = document.getElementById('cpu-tier');      
+      const tierElement = document.getElementById('cpu-tier');
+      const pressureElement = document.getElementById('pressure-state');         
 
       // Wait until the map view is ready
       await viewElement.viewOnReady();
@@ -109,7 +138,23 @@
       // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency
       console.log("Get preset features:", getPresetFeatures(), navigator.hardwareConcurrency);
 
+      const updatePressure = (state) => {
+        pressureElement.replaceChildren();
+        const badge = document.createElement('span');
+        const validStates = ['nominal', 'fair', 'serious', 'critical'];
+        const stateClass = validStates.includes(state) ? state : 'nominal';
+        badge.className = `status-badge pressure-${stateClass}`;
+        badge.textContent = state;
+        pressureElement.append(badge);
+      }   
+
       const setTierBadge = () => {
+        let cpuTier;
+        if(hasCpuPerformance) {
+          cpuTier = navigator.cpuPerformance;
+        } else {
+          cpuTier = 0; // Default to 0 if CPU performance API is not available
+        }
         tierElement.replaceChildren();
         const badge = document.createElement('span');
         badge.className =
@@ -119,39 +164,48 @@
       };
 
       const observePressure = () => {
+        console.log("Starting to observe CPU pressure...");
+        let lastCpuPressure = "unknown";
         if (!hasComputePressure) {
           console.error('PressureObserver is not supported in this browser.');
           return;
         }
-        const cpuObserver = new PressureObserver((list) => {
-          try {
-            list.forEach(({ time, entries }) => {
-              entries.forEach(({ type, lastUpdated, state }) => {
-                console.log(`CPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
-              });
-            });
-          }
-          catch (error) {
-            console.error('Error processing pressure update:', error);
-            cpuObserver.disconnect();
-          }
-        });
-        return cpuObserver.observe("cpu", { sampleInterval: 1000 }); // 1000ms
+        try {
+          const cpuCallback = (entries) => {
+            try {
+              const state = entries[entries.length - 1].state;
+              if (lastCpuPressure !== state) {
+                console.log(`CPU pressure changed: from=${lastCpuPressure} to=${state}`);
+                updatePressure(state);
+              }
+              lastCpuPressure = state;
+            }
+            catch (error) {
+              console.error('Error processing pressure update:', error);
+              cpuObserver.disconnect();
+            }
+          };
 
-        const gpuObserver = new PressureObserver((list) => {
-          try {
-            list.forEach(({ time, entries }) => {
-              entries.forEach(({ type, lastUpdated, state }) => {
-                console.log(`GPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
-              });
-            });
-          }
-          catch (error) {
-            console.error('Error processing GPU pressure update:', error);
-            gpuObserver.disconnect();
-          }
-        });
-        return gpuObserver.observe("gpu", { sampleInterval: 1000 }); // 1000ms        
+          const cpuObserver = new PressureObserver(cpuCallback);
+          return cpuObserver.observe("cpu", { sampleInterval: 1000 }); // 1000ms
+        } catch (error) {
+          console.error('Error initializing CPU PressureObserver:', error);
+        } 
+
+        // const gpuObserver = new PressureObserver((list) => {
+        //   try {
+        //     list.forEach(({ time, entries }) => {
+        //       entries.forEach(({ type, lastUpdated, state }) => {
+        //         console.log(`GPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
+        //       });
+        //     });
+        //   }
+        //   catch (error) {
+        //     console.error('Error processing GPU pressure update:', error);
+        //     gpuObserver.disconnect();
+        //   }
+        // });
+        // return gpuObserver.observe("gpu", { sampleInterval: 1000 }); // 1000ms        
       };
       observePressure();
       setTierBadge();
