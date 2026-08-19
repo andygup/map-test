@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Intro to map components - Create a 2D map | Sample | ArcGIS Maps SDK for JavaScript</title>
+    <title>Performance test | ArcGIS Maps SDK for JavaScript</title>
 
     <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
-    <script type="module" src="https://js.arcgis.com/5.1/"></script>
+    <script type="module" src="https://js.arcgis.com/5.2.0-next/"></script>
 
     <style>
     :root {
@@ -30,6 +30,7 @@
       }
       .dt1 {
         margin-left: 10px;
+        margin-bottom: 10px;
         display: grid;
         gap: 0.35rem;
       }
@@ -95,13 +96,6 @@
       const hasCpuPerformance = 'cpuPerformance' in navigator;
       const hasComputePressure = 'PressureObserver' in window;  
       console.log("hasComputePressure:", hasComputePressure);
-
-      // const updateResults = () => {
-      //   document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
-      //   document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
-      //   console.log("Known sources", PressureObserver.knownSources);
-      // };
-      // updateResults();   
 
       // https://github.com/WICG/cpu-performance
 
