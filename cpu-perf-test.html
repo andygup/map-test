@@ -28,6 +28,9 @@
         height: 100%;
         margin: 0;
       }
+      .dt1 {
+        margin-left: 10px;
+      }
       .result-grid {
         display: grid;
         grid-template-columns: 16rem 1fr;
@@ -80,10 +83,15 @@
 
   <body>
     <dl class="result-grid">
+      <div class="dt1">
       <dt><code>navigator.cpuPerformance</code></dt>
       <dd id="cpu-tier">Checking...</dd>
-      <dt>Compute pressure</dt>
+      <dd id="cpu-description"></dd>
+      </div>
+      <div class="dt1">
+      <dt>Compute cpu pressure</dt>
       <dd id="pressure-state">Checking...</dd>
+      </div>
     </dl>    
     <arcgis-map basemap="topo-vector" zoom="4" center="15, 65">
       <arcgis-zoom slot="top-left"></arcgis-zoom>
@@ -96,49 +104,33 @@
       const updateResults = () => {
         document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
         document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
+        console.log("Known sources", PressureObserver.knownSources);
       };
       updateResults();   
 
       // https://github.com/WICG/cpu-performance
-      const getPresetFeatures = () => {
-        switch (navigator.cpuPerformance) {
-          case 1: // Low end devices
-            return {
-              videoQuality: 'QVGA',
-              frameRate: 15,
-            };
-          case 2: // Mid-low end devices
-            return {
-              videoQuality: 'VGA',
-              frameRate: 15,
-            };
-          case 3: // Mid-high end devices
-            return {
-              videoQuality: '720p',
-              frameRate: 30,
-            };
-          case 4: // High end devices
-          case 0:    // Assuming high performance settings for unknown devices
-          default:   // and for performance tiers higher than 4.
-            return {
-              videoQuality: '1080p',
-              frameRate: 30,
-            };
-        }
+
+      const cpuValues = {
+        1: "Low end device",
+        2: "Mid-low end device",
+        3: "Mid-high end device",
+        4: "High end device",
+        0: "Unknown device"
       }
 
       // Get a reference to the map component
       const viewElement = document.querySelector("arcgis-map");
       const tierElement = document.getElementById('cpu-tier');
-      const pressureElement = document.getElementById('pressure-state');         
+      const cpuDescriptionElement = document.getElementById('cpu-description');
+      const pressureElement = document.getElementById('pressure-state');  
 
       // Wait until the map view is ready
       await viewElement.viewOnReady();
       console.log("Map component is ready");
       // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency
-      console.log("Get preset features:", getPresetFeatures(), navigator.hardwareConcurrency);
+      console.log("Hardware concurrency:", navigator.hardwareConcurrency);
 
-      const updatePressure = (state) => {
+      const updateCpuPressure = (state) => {
         pressureElement.replaceChildren();
         const badge = document.createElement('span');
         const validStates = ['nominal', 'fair', 'serious', 'critical'];
@@ -146,7 +138,7 @@
         badge.className = `status-badge pressure-${stateClass}`;
         badge.textContent = state;
         pressureElement.append(badge);
-      }   
+      }  
 
       const setTierBadge = () => {
         let cpuTier;
@@ -161,6 +153,7 @@
           'tier-badge tier-' + (cpuTier >= 0 && cpuTier <= 4 ? cpuTier : 0);
         badge.textContent = String(cpuTier);
         tierElement.append(badge);
+        cpuDescriptionElement.textContent = cpuValues[cpuTier];
       };
 
       const observePressure = () => {
@@ -176,7 +169,7 @@
               const state = entries[entries.length - 1].state;
               if (lastCpuPressure !== state) {
                 console.log(`CPU pressure changed: from=${lastCpuPressure} to=${state}`);
-                updatePressure(state);
+                updateCpuPressure(state);
               }
               lastCpuPressure = state;
             }
@@ -187,25 +180,11 @@
           };
 
           const cpuObserver = new PressureObserver(cpuCallback);
-          return cpuObserver.observe("cpu", { sampleInterval: 1000 }); // 1000ms
+          cpuObserver.observe("cpu", { sampleInterval: 1000 }); // 1000ms
+          return cpuObserver;
         } catch (error) {
           console.error('Error initializing CPU PressureObserver:', error);
         } 
-
-        // const gpuObserver = new PressureObserver((list) => {
-        //   try {
-        //     list.forEach(({ time, entries }) => {
-        //       entries.forEach(({ type, lastUpdated, state }) => {
-        //         console.log(`GPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
-        //       });
-        //     });
-        //   }
-        //   catch (error) {
-        //     console.error('Error processing GPU pressure update:', error);
-        //     gpuObserver.disconnect();
-        //   }
-        // });
-        // return gpuObserver.observe("gpu", { sampleInterval: 1000 }); // 1000ms        
       };
       observePressure();
       setTierBadge();
