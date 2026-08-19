@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Intro to map components - Create a 2D map | Sample | ArcGIS Maps SDK for JavaScript</title>
+
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <script type="module" src="https://js.arcgis.com/5.1/"></script>
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: 16rem 1fr;
+        gap: 0.5rem 1.25rem;
+        align-items: baseline;
+      }
+      .result-grid dt {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .result-grid dd {
+        margin: 0;
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        word-break: break-word;
+      }
+      .tier-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 50%;
+        color: white;
+        font-weight: 600;
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.95rem;
+      }
+      .tier-0 { background: var(--tier-0); }
+      .tier-1 { background: var(--tier-1); }
+      .tier-2 { background: var(--tier-2); }
+      .tier-3 { background: var(--tier-3); }
+      .tier-4 { background: var(--tier-4); }      
+    </style>
+  </head>
+
+  <body>
+    <dl class="result-grid">
+      <dt><code>navigator.cpuPerformance</code></dt>
+      <dd id="cpu-tier">Checking...</dd>
+      <dt>Compute pressure</dt>
+      <dd id="pressure-state">Checking...</dd>
+    </dl>    
+    <arcgis-map basemap="topo-vector" zoom="4" center="15, 65">
+      <arcgis-zoom slot="top-left"></arcgis-zoom>
+    </arcgis-map>
+    <script type="module">
+      const hasCpuPerformance = 'cpuPerformance' in navigator;
+      const hasComputePressure = 'PressureObserver' in window;
+      const cpuTier = navigator.cpuPerformance;      
+      console.log("hasComputePressure:", hasComputePressure);
+
+      const updateResults = () => {
+        document.getElementById("cpu-tier").textContent = hasCpuPerformance ? "Supported" : "Not supported";
+        document.getElementById("pressure-state").textContent = hasComputePressure ? "Supported" : "Not supported";
+      };
+      updateResults();
+
+      // https://github.com/WICG/cpu-performance
+      const getPresetFeatures = () => {
+        switch (navigator.cpuPerformance) {
+          case 1: // Low end devices
+            return {
+              videoQuality: 'QVGA',
+              frameRate: 15,
+            };
+          case 2: // Mid-low end devices
+            return {
+              videoQuality: 'VGA',
+              frameRate: 15,
+            };
+          case 3: // Mid-high end devices
+            return {
+              videoQuality: '720p',
+              frameRate: 30,
+            };
+          case 4: // High end devices
+          case 0:    // Assuming high performance settings for unknown devices
+          default:   // and for performance tiers higher than 4.
+            return {
+              videoQuality: '1080p',
+              frameRate: 30,
+            };
+        }
+      }
+
+      // Get a reference to the map component
+      const viewElement = document.querySelector("arcgis-map");
+      const tierElement = document.getElementById('cpu-tier');      
+
+      // Wait until the map view is ready
+      await viewElement.viewOnReady();
+      console.log("Map component is ready");
+      // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency
+      console.log("Get preset features:", getPresetFeatures(), navigator.hardwareConcurrency);
+
+      const setTierBadge = () => {
+        tierElement.replaceChildren();
+        const badge = document.createElement('span');
+        badge.className =
+          'tier-badge tier-' + (cpuTier >= 0 && cpuTier <= 4 ? cpuTier : 0);
+        badge.textContent = String(cpuTier);
+        tierElement.append(badge);
+      };
+
+      const observePressure = () => {
+        if (!hasComputePressure) {
+          console.error('PressureObserver is not supported in this browser.');
+          return;
+        }
+        const cpuObserver = new PressureObserver((list) => {
+          try {
+            list.forEach(({ time, entries }) => {
+              entries.forEach(({ type, lastUpdated, state }) => {
+                console.log(`CPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
+              });
+            });
+          }
+          catch (error) {
+            console.error('Error processing pressure update:', error);
+            cpuObserver.disconnect();
+          }
+        });
+        return cpuObserver.observe("cpu", { sampleInterval: 1000 }); // 1000ms
+
+        const gpuObserver = new PressureObserver((list) => {
+          try {
+            list.forEach(({ time, entries }) => {
+              entries.forEach(({ type, lastUpdated, state }) => {
+                console.log(`GPU pressure update: type=${type}, lastUpdated=${lastUpdated}, state=${state}`);
+              });
+            });
+          }
+          catch (error) {
+            console.error('Error processing GPU pressure update:', error);
+            gpuObserver.disconnect();
+          }
+        });
+        return gpuObserver.observe("gpu", { sampleInterval: 1000 }); // 1000ms        
+      };
+      observePressure();
+      setTierBadge();
+    </script>
+  </body>
+</html>
