@@ -30,12 +30,19 @@
       }
       .dt1 {
         margin-left: 10px;
+        display: grid;
+        gap: 0.35rem;
       }
+      .label {
+        color: var(--muted);
+        font-size: 1rem;
+      }      
       .result-grid {
         display: grid;
-        grid-template-columns: 16rem 1fr;
-        gap: 0.5rem 1.25rem;
-        align-items: baseline;
+        grid-template-columns: repeat(3, max-content);
+        justify-content: start;
+        gap: 1rem 0.75rem;
+        align-items: start;
       }
       .result-grid dt {
         color: var(--muted);
@@ -82,17 +89,23 @@
   </head>
 
   <body>
-    <dl class="result-grid">
+    <div class="result-grid">
       <div class="dt1">
-      <dt><code>navigator.cpuPerformance</code></dt>
-      <dd id="cpu-tier">Checking...</dd>
-      <dd id="cpu-description"></dd>
+        <div class="label">navigator.cpuPerformance</div>
+        <div id="cpu-tier">Checking...</div>
+        <div id="cpu-description"></div>
       </div>
+
       <div class="dt1">
-      <dt>Compute cpu pressure</dt>
-      <dd id="pressure-state">Checking...</dd>
+        <div class="label">Compute cpu pressure</div>
+        <div id="pressure-state">Checking...</div>
       </div>
-    </dl>    
+
+      <div class="dt1">
+        <div class="label">navigator.hardwareConcurrency</div>
+        <div id="hardware-concurrency">Checking...</div>
+      </div>
+    </div>   
     <arcgis-map basemap="topo-vector" zoom="4" center="15, 65">
       <arcgis-zoom slot="top-left"></arcgis-zoom>
     </arcgis-map>
@@ -128,6 +141,7 @@
       await viewElement.viewOnReady();
       console.log("Map component is ready");
       // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency
+      document.getElementById("hardware-concurrency").textContent = navigator.hardwareConcurrency;
       console.log("Hardware concurrency:", navigator.hardwareConcurrency);
 
       const updateCpuPressure = (state) => {
