@@ -52,24 +52,7 @@
         margin: 0;
         font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
         word-break: break-word;
-      }
-      .tier-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 50%;
-        color: white;
-        font-weight: 600;
-        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-        font-size: 0.95rem;
-      }
-      .tier-0 { background: var(--tier-0); }
-      .tier-1 { background: var(--tier-1); }
-      .tier-2 { background: var(--tier-2); }
-      .tier-3 { background: var(--tier-3); }
-      .tier-4 { background: var(--tier-4); }      
+      }  
       .status-badge {
         display: inline-flex;
         align-items: center;
@@ -135,6 +118,7 @@
       const viewElement = document.querySelector("arcgis-map");
       const tierElement = document.getElementById('cpu-tier');
       const cpuDescriptionElement = document.getElementById('cpu-description');
+      cpuDescriptionElement.textContent = cpuValues[navigator.cpuPerformance];
       const pressureElement = document.getElementById('pressure-state');  
 
       // Wait until the map view is ready
@@ -153,22 +137,6 @@
         badge.textContent = state;
         pressureElement.append(badge);
       }  
-
-      const setTierBadge = () => {
-        let cpuTier;
-        if(hasCpuPerformance) {
-          cpuTier = navigator.cpuPerformance;
-        } else {
-          cpuTier = 0; // Default to 0 if CPU performance API is not available
-        }
-        tierElement.replaceChildren();
-        const badge = document.createElement('span');
-        badge.className =
-          'tier-badge tier-' + (cpuTier >= 0 && cpuTier <= 4 ? cpuTier : 0);
-        badge.textContent = String(cpuTier);
-        tierElement.append(badge);
-        cpuDescriptionElement.textContent = cpuValues[cpuTier];
-      };
 
       const observePressure = () => {
         console.log("Starting to observe CPU pressure...");
@@ -201,7 +169,6 @@
         } 
       };
       observePressure();
-      setTierBadge();
     </script>
   </body>
 </html>
